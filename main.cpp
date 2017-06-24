@@ -51,7 +51,7 @@ void T3() {
     print(a);
     std::random_shuffle(v.begin(), v.end());
     for (int i = 0; i < (int)v.size(); i++) {
-        std::cout << *a.upper_bound(v[i]) << ' ';
+        std::cout << *a.lower_bound(v[i]) << ' ';
     }
     std::cout << std::endl;
 }
