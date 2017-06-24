@@ -11,8 +11,8 @@ set<T>::iterator::iterator(set::node_base* p)
 
 template <typename T>
 typename set<T>::iterator& set<T>::iterator::operator++() {
-    if (static_cast<node*>(p)->right != nullptr) {
-        p = static_cast<node*>(p)->right;
+    if (static_cast<node const*>(p)->right != nullptr) {
+        p = static_cast<node const*>(p)->right;
         while (p->left != nullptr) {
             p = p->left;
         }
@@ -57,14 +57,8 @@ typename set<T>::iterator set<T>::iterator::operator--(int) {
 
 template <typename T>
 T const& set<T>::iterator::operator*() const {
-    return static_cast<node*>(p)->data;
+    return static_cast<node const*>(p)->data;
 }
-
-/*
-template <typename U>
-bool operator==(set<U>::iterator const& a, set<U>::iterator const& b) {
-    return a.p == b.p;
-}*/
 
 template <typename T>
 typename set<T>::iterator set<T>::insert(T const& new_node) {
@@ -96,21 +90,6 @@ typename set<T>::iterator set<T>::insert(T const& new_node) {
     }
 }
 
-#include <iostream>
-template <typename T>
-void set<T>::print(node_base* cur_node) {
-    if (!cur_node) {
-        return;
-    }
-    if (cur_node->left) {
-        print(cur_node->left);
-    }
-    std::cout << static_cast<node*>(cur_node)->data << ' ';
-    if (static_cast<node*>(cur_node)->right) {
-        print(static_cast<node*>(cur_node)->right);
-    }
-}
-
 template <typename T>
 typename set<T>::const_iterator set<T>::begin() const {
     node_base* cur_node = fake_node;
@@ -129,7 +108,7 @@ template <typename T>
 typename set<T>::iterator set<T>::erase(set<T>::iterator it) {
     iterator res = it;
     res++;
-    node_base* cur_node = it.p;
+    node_base* cur_node = (node_base*)it.p;
     node_base* p = static_cast<node*>(cur_node)->parent;
     if (!cur_node->left && !static_cast<node*>(cur_node)->right) {
         if (p->left == cur_node) {
@@ -162,7 +141,7 @@ typename set<T>::iterator set<T>::erase(set<T>::iterator it) {
             }
             static_cast<node*>(static_cast<node*>(cur_node)->right)->parent = p;
         } else {
-            node_base* next_node = res.p;
+            node_base* next_node = (node_base*)res.p;
             static_cast<node*>(next_node)->parent = p;
             next_node->left = cur_node->left;
             static_cast<node*>(next_node)->right = static_cast<node*>(cur_node)->right;
@@ -173,7 +152,7 @@ typename set<T>::iterator set<T>::erase(set<T>::iterator it) {
 }
 
 template <typename T>
-typename set<T>::const_iterator set<T>::find(const T& val) {
+typename set<T>::const_iterator set<T>::find(const T& val) const {
     iterator lb = lower_bound(val);
     if (lb == end() || static_cast<node*>(lb.p)->data == val) {
         return lb;
@@ -210,7 +189,7 @@ typename set<T>::const_iterator set<T>::lower_bound(const T &val) const {
 template <typename T>
 typename set<T>::const_iterator set<T>::upper_bound(const T &val) const {
     iterator lb = lower_bound(val);
-    if (lb == end() || static_cast<node*>(lb.p)->data != val) {
+    if (lb == end() || static_cast<node const*>(lb.p)->data != val) {
         return lb;
     }
     return ++lb;
@@ -243,6 +222,7 @@ void set<T>::clear() {
 template <typename T>
 set<T>::~set() {
     clear();
+    delete fake_node;
 }
 
 template <typename T>

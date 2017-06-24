@@ -15,7 +15,6 @@ void T1() {
     for (int i = 0; i < 100; i++) {
         a.insert(i);
     }
-    //print(a);
     while (!a.empty()) {
         std::cout << *a.begin() << ' ';
         a.erase(a.begin());

@@ -9,6 +9,7 @@
 
 template <typename T>
 struct set {
+private:
     struct node_base {
         node_base *left = nullptr;
     };
@@ -26,22 +27,27 @@ struct set {
         }
     };
 
+    void clear(node_base* cur_node);
+    void deep_copy(node_base* dst, node_base* src, node_base* parent);
+
+public:
     struct iterator {
+        friend set;
         typedef T value_type;
         typedef std::ptrdiff_t difference_type;
         typedef T const* pointer;
         typedef T const& reference;
         typedef std::bidirectional_iterator_tag iterator_category;
-        T const& operator*() const;
 
+    private:
         node_base* p;
         iterator(node_base*);
+    public:
         iterator& operator++();
         iterator& operator--();
         iterator operator++(int);
         iterator operator--(int);
-
-        //friend bool operator==(set<T>::iterator const& a, set<T>::iterator const& b);
+        T const& operator*() const;
 
         friend bool operator==(set<T>::iterator const& a, set<T>::iterator const& b) {
             return a.p == b.p;
@@ -54,6 +60,7 @@ struct set {
     typedef iterator const_iterator;
     typedef std::reverse_iterator<iterator> reverse_iterator;
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+    friend iterator;
 
     node_base* fake_node = new node_base;
 
@@ -62,11 +69,10 @@ struct set {
     ~set();
     set& operator=(set const&);
     bool empty() const;
-    void clear(node_base* cur_node);
     void clear();
     iterator insert(T const& new_node);
     iterator erase(iterator it);
-    const_iterator find(T const& val);
+    const_iterator find(T const& val) const;
     const_iterator lower_bound(T const& val) const;
     const_iterator upper_bound(T const& val) const;
     const_iterator begin() const;
@@ -74,7 +80,5 @@ struct set {
     const_reverse_iterator rbegin() const;
     const_reverse_iterator rend() const;
     void swap(set& other);
-    void print(node_base* cur_node);
-    void deep_copy(node_base* dst, node_base* src, node_base* parent);
 };
 #endif //SET_SET_H
