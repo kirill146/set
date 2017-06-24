@@ -56,9 +56,21 @@ void T3() {
     std::cout << std::endl;
 }
 
+void T4() {
+    std::string s1 = "abacaba";
+    std::string s2 = "hello";
+    std::string s3 = "world";
+    set<std::string> a;
+    a.insert(s1);
+    a.insert(s3);
+    a.insert(s2);
+    std::cout << *a.begin() << std::endl;
+}
+
 int main() {
     T1();
     T2();
     T3();
+    T4();
     return 0;
 }
