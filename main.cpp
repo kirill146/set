@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "set.cpp"
+#include "set.h"
 
 void print(set<int> const& a) {
     for (set<int>::iterator it = a.begin(); it != a.end(); it++) {
